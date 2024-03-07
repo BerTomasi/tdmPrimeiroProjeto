@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'screens/list.dart';
 import 'database/tarefa_dao.dart';
