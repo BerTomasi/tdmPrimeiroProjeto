@@ -38,4 +38,10 @@ class TarefaDao{
     Map<String, dynamic> tarefaMap = toMap(tarefa);
     return db.update('tarefa', tarefaMap, where: 'id = ?', whereArgs: [tarefa.id]);
   }
+
+  // Método para a remoção
+  Future<int> delete(int id) async{
+    final Database db = await getDatabase();
+    return db.delete('tarefa', where: 'id = ?', whereArgs: [id]);
+  }
 }

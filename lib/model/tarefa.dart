@@ -3,7 +3,7 @@ class Tarefa{
   final String descricao;
   final String obs;
   //construtor
-  Tarefa(this.descricao, this.obs);
+  Tarefa(this.id, this.descricao, this.obs);
 
   @override
   String toString() {
