@@ -1,4 +1,5 @@
 class Tarefa{
+  final int id;
   final String descricao;
   final String obs;
   //construtor
