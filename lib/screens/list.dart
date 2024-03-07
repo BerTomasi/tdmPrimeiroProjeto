@@ -70,9 +70,9 @@ class ListaTarefaState extends State<ListaTarefa>{
 
             // gerenciamento de estado do flutter
             // aplicação que muda muita o estado recomenda-se o uso de outro método de gerenciamento que não o padrão da linguagem
-            // reconstroi o build
+            // reconstroi o build dessa classe
             setState(() {
-
+              // reconstroi tudo -> a barra, botão, ... -> isso pode causar perda de desempenho
             });
           });
         },
