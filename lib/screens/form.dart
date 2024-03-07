@@ -39,7 +39,7 @@ class FormTarefaState extends State<FormTarefa>{
   }
 
   void criarTerefa(BuildContext context) {
-    final tarefaCriada = Tarefa(widget._controladorTarefa.text, widget._controladorObs.text);
+    final tarefaCriada = Tarefa(0, widget._controladorTarefa.text, widget._controladorObs.text);
     print(tarefaCriada);
 
     Navigator.pop(context, tarefaCriada); // conceito de pilha, foi feito um push e agora um pop
