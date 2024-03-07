@@ -21,14 +21,27 @@ class ItemTarefa extends StatelessWidget{
   }
 }
 
-class ListaTarefa extends StatelessWidget{
+// Stateful -> 2 classes -> 1 é o widget e a outra é o controlador
+class ListaTarefa extends StatefulWidget {
 
-  final List<Tarefa> _tarefas = []; // vai alimentar a montagem da home
+  final List<Tarefa> _tarefas = [];
+
+  // método que instância o estado -> cria o estado com base na outra classe
+  @override
+  State<StatefulWidget> createState() {
+    return ListaTarefaState();
+  } // vai alimentar a montagem da home
+
+}
+
+// controla o estado de ListaTarefa
+class ListaTarefaState extends State<ListaTarefa>{
 
   @override
   Widget build(BuildContext context) {
 
-    _tarefas.add(Tarefa("TCC2", "Fazer o Tcc2"));
+    // tem que por o widget. para informar pra quem apontar
+    // widget._tarefas.add(Tarefa("TCC2", "Fazer o Tcc2"));
 
     return Scaffold(
       appBar: AppBar(
@@ -36,9 +49,9 @@ class ListaTarefa extends StatelessWidget{
       ),
       body: ListView.builder( // componente de listagem (exibição) -> cria uma rolagem e exibição
 
-          itemCount: _tarefas.length, // contador de tarefas -> tamanho da lista _tarefas
+          itemCount: widget._tarefas.length, // contador de tarefas -> tamanho da lista _tarefas
           itemBuilder: (context, indice){
-            final tarefa = _tarefas[indice]; // pega o item da lista no indice
+            final tarefa = widget._tarefas[indice]; // pega o item da lista no indice
             return ItemTarefa(tarefa);
 
           }),
@@ -53,7 +66,14 @@ class ListaTarefa extends StatelessWidget{
           future.then((tarefa){ // para esse obj future vamos ver se está capturando a tarefa
             print(tarefa); // está fazendo o retorno da tarefa criada na página
 
-            _tarefas.add(tarefa); // adicionar a lista ->  para dar certo tem que mudar o objeto para statefull
+            widget._tarefas.add(tarefa); // adicionar a lista ->  para dar certo tem que mudar o objeto para statefull
+
+            // gerenciamento de estado do flutter
+            // aplicação que muda muita o estado recomenda-se o uso de outro método de gerenciamento que não o padrão da linguagem
+            // reconstroi o build
+            setState(() {
+
+            });
           });
         },
 
