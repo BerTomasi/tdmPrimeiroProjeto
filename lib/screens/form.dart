@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import '../components/editor.dart';
 import '../model/tarefa.dart';
 
-class FormTarefa extends StatelessWidget{
+class FormTarefa extends StatefulWidget {
 
   final TextEditingController _controladorTarefa = TextEditingController();
   final TextEditingController _controladorObs = TextEditingController();
+
+  @override
+  State<StatefulWidget> createState() {
+    return FormTarefaState();
+  }
+}
+
+class FormTarefaState extends State<FormTarefa>{
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +22,8 @@ class FormTarefa extends StatelessWidget{
       appBar: AppBar(title: Text("Form tarefa"),),
       body: Column(
         children: [
-          Editor(_controladorTarefa, "Tarefa", "Indique a tarefa", Icons.assignment),
-          Editor(_controladorObs, "OBS", "Escreva a observação", Icons.assignment),
+          Editor(widget._controladorTarefa, "Tarefa", "Indique a tarefa", Icons.assignment),
+          Editor(widget._controladorObs, "OBS", "Escreva a observação", Icons.assignment),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -31,7 +39,7 @@ class FormTarefa extends StatelessWidget{
   }
 
   void criarTerefa(BuildContext context) {
-    final tarefaCriada = Tarefa(_controladorTarefa.text, _controladorObs.text);
+    final tarefaCriada = Tarefa(widget._controladorTarefa.text, widget._controladorObs.text);
     print(tarefaCriada);
 
     Navigator.pop(context, tarefaCriada); // conceito de pilha, foi feito um push e agora um pop
