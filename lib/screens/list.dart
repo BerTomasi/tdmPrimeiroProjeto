@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primeiroprojeto/database/tarefa_dao.dart';
 import '../model/tarefa.dart';
 import '../screens/form.dart';
 
@@ -37,6 +38,8 @@ class ListaTarefa extends StatefulWidget {
 // controla o estado de ListaTarefa
 class ListaTarefaState extends State<ListaTarefa>{
 
+  final TarefaDao _dao = TarefaDao();
+
   @override
   Widget build(BuildContext context) {
 
@@ -47,14 +50,27 @@ class ListaTarefaState extends State<ListaTarefa>{
       appBar: AppBar(
         title: Text("Lista de tarefas"),
       ),
-      body: ListView.builder( // componente de listagem (exibição) -> cria uma rolagem e exibição
-
-          itemCount: widget._tarefas.length, // contador de tarefas -> tamanho da lista _tarefas
-          itemBuilder: (context, indice){
-            final tarefa = widget._tarefas[indice]; // pega o item da lista no indice
-            return ItemTarefa(tarefa);
-
-          }),
+      body: FutureBuilder<List<Tarefa>>( // construção que depende de algo que vai retornar do futuro -> lista de tarefas
+        initialData: [],
+        future: Future.delayed(Duration(seconds: 1)).then((value) => _dao.findAll()),
+        builder: (context,snapshot){ // só termina de construir quando terminar de carregar tudo -> um tipo de conexão
+          switch(snapshot.connectionState){
+            case ConnectionState.done:
+              if(snapshot.data!=null){
+                final List<Tarefa>? tarefas = snapshot.data;
+                return ListView.builder(itemBuilder: (context,index){
+                  final Tarefa tarefa = tarefas![index];
+                  return ItemTarefa(tarefa);
+                },
+                itemCount: tarefas!.length);
+              }
+              break;
+            default:
+              return Center(child:Text("Nenhuma tarefa"),);
+          }
+          return Center(child: Text("Carregando..."),);
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           print("Clicou no botão");
