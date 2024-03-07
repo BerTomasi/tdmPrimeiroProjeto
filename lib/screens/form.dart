@@ -5,6 +5,9 @@ import '../model/tarefa.dart';
 
 class FormTarefa extends StatefulWidget {
 
+  final Tarefa? tarefa; // pode chegar com valor nulo -> por isso o uso do ?
+  FormTarefa({this.tarefa}); // o { significa opcionalidade -> pode ou não chegar valor nulo
+
   final TextEditingController _controladorTarefa = TextEditingController();
   final TextEditingController _controladorObs = TextEditingController();
 
@@ -15,6 +18,18 @@ class FormTarefa extends StatefulWidget {
 }
 
 class FormTarefaState extends State<FormTarefa>{
+
+  int? _id; // pode conter valor nulo
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.tarefa != null){ // significa que é uma alteração
+      _id = widget.tarefa!.id; // ! -> significa que eu enquanto dev sei que tem uma info -> força a aceitar
+      widget._controladorTarefa.text = widget.tarefa!.descricao;
+      widget._controladorObs.text = widget.tarefa!.obs;
+    }
+  }  // pode conter valor nulo
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +58,18 @@ class FormTarefaState extends State<FormTarefa>{
 
     TarefaDao _dao = TarefaDao();
 
-    final tarefaCriada = Tarefa(0, widget._controladorTarefa.text, widget._controladorObs.text);
-    print(tarefaCriada);
-    _dao.save(tarefaCriada).then((id){
+    if(_id != null){ // alteração
+      final tarefaCriada = Tarefa(_id!, widget._controladorTarefa.text, widget._controladorObs.text);
+      _dao.update(tarefaCriada).then((id){});
       Navigator.pop(context, tarefaCriada); // conceito de pilha, foi feito um push e agora um pop
-
-      final SnackBar snackBar = SnackBar(content: const Text("Tarefa criada")); // exibe uma mensagem ao fechar
-      ScaffoldMessenger.of(context).showSnackBar(snackBar); // exibe a snackbar com a mensagem de a cima
-      _dao.findAll().then((tarefa) => print(tarefa.toString()));
-    });
+    }else { //inclusão
+      final tarefaCriada = Tarefa(0, widget._controladorTarefa.text, widget._controladorObs.text);
+      print(tarefaCriada);
+      _dao.save(tarefaCriada).then((id) {});
+      Navigator.pop(context, tarefaCriada); // conceito de pilha, foi feito um push e agora um pop
+    }
+    final SnackBar snackBar = SnackBar(content: const Text("Tarefa criada")); // exibe uma mensagem ao fechar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar); // exibe a snackbar com a mensagem de a cima
+    _dao.findAll().then((tarefa) => print(tarefa.toString()));
   }
-
 }
