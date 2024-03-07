@@ -4,10 +4,19 @@ import 'app_database.dart';
 
 class TarefaDao{
 
+  static const String _tableName = 'tarefas';
+  static const String _id = 'id';
+  static const String _descricao = 'descricao';
+  static const String _obs = 'obs';
+  static const String tableSQL = 'CREATE TABLE tarefas('
+      'id INTEGER PRIMARY KEY, '
+      'descricao TEXT, '
+      'obs text)';
+
   Map<String, dynamic> toMap(Tarefa tarefa){
     final Map<String, dynamic> tarefaMap = Map();
-    tarefaMap['descricao'] = tarefa.descricao;
-    tarefaMap['obs'] = tarefa.obs;
+    tarefaMap[_descricao] = tarefa.descricao;
+    tarefaMap[_obs] = tarefa.obs;
     return tarefaMap;
   }
 
@@ -15,26 +24,26 @@ class TarefaDao{
   Future<int> save(Tarefa tarefa) async{
     final Database db = await getDatabase();
     Map<String, dynamic> tarefaMap = toMap(tarefa);
-    return db.insert('tarefas', tarefaMap);
+    return db.insert(_tableName, tarefaMap);
   }
 
   // Método para a alteração
   Future<int> update(Tarefa tarefa) async{
     final Database db = await getDatabase();
     Map<String, dynamic> tarefaMap = toMap(tarefa);
-    return db.update('tarefas', tarefaMap, where: 'id = ?', whereArgs: [tarefa.id]);
+    return db.update(_tableName, tarefaMap, where: 'id = ?', whereArgs: [tarefa.id]);
   }
 
   // Método para a remoção
   Future<int> delete(int id) async{
     final Database db = await getDatabase();
-    return db.delete('tarefas', where: 'id = ?', whereArgs: [id]);
+    return db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
   }
 
   List<Tarefa> toList(List<Map<String, dynamic>> result){
     final List<Tarefa> tarefas = [];
     for(Map<String, dynamic>row in result){
-      final Tarefa tarefa = Tarefa(row['id'], row['descricao'], row['obs']);
+      final Tarefa tarefa = Tarefa(row[_id], row[_descricao], row[_obs]);
       tarefas.add(tarefa);
     }
     return tarefas;
@@ -42,7 +51,7 @@ class TarefaDao{
 
   Future<List<Tarefa>> findAll() async{
     final Database db = await getDatabase();
-    final List<Map<String, dynamic>> result = await db.query('tarefas');
+    final List<Map<String, dynamic>> result = await db.query(_tableName);
     List<Tarefa> tarefas = toList(result);
     return tarefas;
   }
