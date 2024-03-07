@@ -31,13 +31,13 @@ class TarefaDao{
   Future<int> update(Tarefa tarefa) async{
     final Database db = await getDatabase();
     Map<String, dynamic> tarefaMap = toMap(tarefa);
-    return db.update(_tableName, tarefaMap, where: 'id = ?', whereArgs: [tarefa.id]);
+    return db.update(_tableName, tarefaMap, where: '$_id = ?', whereArgs: [tarefa.id]);
   }
 
   // Método para a remoção
   Future<int> delete(int id) async{
     final Database db = await getDatabase();
-    return db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+    return db.delete(_tableName, where: '$_id = ?', whereArgs: [id]);
   }
 
   List<Tarefa> toList(List<Map<String, dynamic>> result){
