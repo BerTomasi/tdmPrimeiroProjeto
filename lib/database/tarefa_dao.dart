@@ -44,4 +44,20 @@ class TarefaDao{
     final Database db = await getDatabase();
     return db.delete('tarefa', where: 'id = ?', whereArgs: [id]);
   }
+
+  List<Tarefa> toList(List<Map<String, dynamic>> result){
+    final List<Tarefa> tarefas = [];
+    for(Map<String, dynamic>row in result){
+      final Tarefa tarefa = Tarefa(row['id'], row['descricao'], row['obs']);
+      tarefas.add(tarefa);
+    }
+    return tarefas;
+  }
+
+  Future<List<Tarefa>> findAll() async{
+    final Database db = await getDatabase();
+    final List<Map<String, dynamic>> result = await db.query('tarefas');
+    List<Tarefa> tarefas = toList(result);
+    return tarefas;
+  }
 }
