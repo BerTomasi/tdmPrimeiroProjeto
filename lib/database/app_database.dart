@@ -17,13 +17,14 @@ Future<Database> getDatabase() async{
 
       onUpgrade: (db, oldVersion, newVersion) async{ // se tiver diferença entre a versão nova e a antiga ele executa a atualização
         var batch = db.batch();
-        print("Versão antiga: " + oldVersion.toString());
-        print("versão nova: " + newVersion.toString());
+        print("-------->Versão antiga: " + oldVersion.toString());
+        print("-------->Versão nova: " + newVersion.toString());
         if(newVersion == 2){
           batch.execute(tableSQL2);
         }
         await batch.commit();
       },
-      version:2
+      version:1, // se estiver na versão 2 do banco e colocar 1 -> executa um downgrade -> mata os registros
+    onDowngrade: onDatabaseDowngradeDelete
   );
 }
