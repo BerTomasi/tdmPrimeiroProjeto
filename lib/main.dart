@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/list.dart';
+import 'package:primeiroprojeto/menu.dart';
 import 'database/tarefa_dao.dart';
-import 'model/tarefa.dart';
 
 void main() {
   runApp(TarefaApp());
@@ -18,7 +17,7 @@ class TarefaApp extends StatelessWidget{
   Widget build(BuildContext context) {
 
     return MaterialApp(
-        home: ListaTarefa()
+        home: MenuOptions()
     );
 
     // TODO: implement build
