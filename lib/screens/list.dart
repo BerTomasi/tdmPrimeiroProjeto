@@ -1,26 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:primeiroprojeto/database/tarefa_dao.dart';
 import '../model/tarefa.dart';
 import '../screens/form.dart';
 
-class ItemTarefa extends StatelessWidget{
 
-  final Tarefa _tarefa; // "_" convenção do Dart -> é um objeto privado acessado somente dentro da classe
-  const ItemTarefa(this._tarefa);
-
-  @override
-  Widget build(BuildContext context) { // construtor da tela
-    return Card(
-      child: ListTile(
-        leading: Icon(Icons.add_alert),
-        title: Text(this._tarefa.descricao),
-        subtitle: Text(this._tarefa.obs),
-      ),
-    );
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
 
 // Stateful -> 2 classes -> 1 é o widget e a outra é o controlador
 class ListaTarefa extends StatefulWidget {
@@ -60,7 +44,7 @@ class ListaTarefaState extends State<ListaTarefa>{
                 final List<Tarefa>? tarefas = snapshot.data;
                 return ListView.builder(itemBuilder: (context,index){
                   final Tarefa tarefa = tarefas![index];
-                  return ItemTarefa(tarefa);
+                  return ItemTarefa(context, tarefa);
                 },
                 itemCount: tarefas!.length);
               }
@@ -100,4 +84,33 @@ class ListaTarefaState extends State<ListaTarefa>{
     throw UnimplementedError();
   }
 
+  Widget ItemTarefa (BuildContext context, Tarefa _tarefa){ //método que retorna um widget -> card
+    return GestureDetector( // detecta um gesto
+      onTap: (){
+
+      }, // precionar, clicar, seleciona a região
+      child: Card(
+          child: ListTile(
+            leading: Icon(Icons.add_alert), // icone do sino
+            title: Text(_tarefa.descricao), // titulo
+            subtitle: Text(_tarefa.obs), // obs
+            trailing: Row( // elemento a mais a direita
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: (){
+                    _dao.delete(_tarefa.id).then((value) => setState(() {
+                      // DELETA o elemento -> retorna um valor -> setstate: reconstroi o build -> atualiza o build
+                    }));
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.remove_circle, color: Colors.red),
+                  ),
+                )
+              ],
+            ),
+          )),
+    );
+  }
 }
