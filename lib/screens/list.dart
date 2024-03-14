@@ -50,7 +50,7 @@ class ListaTarefaState extends State<ListaTarefa>{
               }
               break;
             default:
-              return Center(child:Text("Nenhuma tarefa"),);
+              return Center(child:Text("Carregando..."),);
           }
           return Center(child: Text("Carregando..."),);
         },
@@ -87,7 +87,12 @@ class ListaTarefaState extends State<ListaTarefa>{
   Widget ItemTarefa (BuildContext context, Tarefa _tarefa){ //método que retorna um widget -> card
     return GestureDetector( // detecta um gesto
       onTap: (){
-
+        final Future future = Navigator.push(context, MaterialPageRoute(builder: (context){ // atualiza a tarefa -> permite clicar nela e atualizar ela
+          return FormTarefa(tarefa : _tarefa);
+        }));
+        future.then((value) => setState(() {
+          //atualiza o build
+        }));
       }, // precionar, clicar, seleciona a região
       child: Card(
           child: ListTile(

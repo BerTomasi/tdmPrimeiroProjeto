@@ -8,6 +8,7 @@ class TarefaDao{
   static const String _id = 'id';
   static const String _descricao = 'descricao';
   static const String _obs = 'obs';
+
   static const String tableSQL = 'CREATE TABLE tarefas('
       'id INTEGER PRIMARY KEY, '
       'descricao TEXT, '
